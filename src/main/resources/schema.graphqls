@@ -1,0 +1,23 @@
+directive @sc_hidden on FIELD_DEFINITION
+directive @sc_required_role(role: String!) on FIELD_DEFINITION
+
+type User {
+    id: ID!
+    username: String!
+    email: String!
+    password: String @sc_hidden
+    role: String!
+}
+
+type Employee {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    salary: Float @sc_required_role(role: "administrator")
+}
+
+type Query {
+    user(id: ID!): User
+    employee(id: ID!): Employee
+}
+
