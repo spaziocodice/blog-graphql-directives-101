@@ -1,6 +1,5 @@
 package com.spaziocodice.graphql101.schema.datafetchers;
 
-import com.google.common.collect.ImmutableMap;
 import graphql.schema.DataFetcher;
 import org.springframework.stereotype.Component;
 
@@ -8,17 +7,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Arrays.asList;
+
 @Component
 public class GraphQLDataFetchers {
 
-    private static final List<Map<String, String>> users = Arrays.asList(
-            ImmutableMap.of(
+    static final List<Map<String, String>> USERS = asList(
+            Map.of(
                     "id", "1",
                     "username", "user1",
                     "email", "user1@mycompany.com",
                     "password", "Y6HhM|8?9,%X{w@dczg`",
                     "role", "user"),
-            ImmutableMap.of(
+            Map.of(
                     "id", "2",
                     "username", "user2",
                     "email", "user2@mycompany.com",
@@ -26,25 +27,25 @@ public class GraphQLDataFetchers {
                     "role", "administrator")
     );
 
-    private static final List<Map<String, Object>> employees = Arrays.asList(
-            ImmutableMap.of("id", "12345",
+    static final List<Map<String, Object>> EMPLOYEES = Arrays.asList(
+            Map.of("id", "12345",
                     "firstName", "Jean",
                     "lastName", "Kowalski",
                     "salary", 52000.00F),
-            ImmutableMap.of("id", "23456",
-                "firstName", "Martin",
-                "lastName", "Brewert",
-                "salary", 51000.00F),
-            ImmutableMap.of("id", "34567",
-                "firstName", "Monique",
-                "lastName", "Duval",
-                "salary", 54000.00F)
-        );
+            Map.of("id", "23456",
+                    "firstName", "Martin",
+                    "lastName", "Brewert",
+                    "salary", 51000.00F),
+            Map.of("id", "34567",
+                    "firstName", "Monique",
+                    "lastName", "Duval",
+                    "salary", 54000.00F)
+    );
 
-    public DataFetcher user() {
+    public DataFetcher<Map<String, String>> user() {
         return dataFetchingEnvironment -> {
-            String userId = dataFetchingEnvironment.getArgument("id");
-            return users
+            var userId = dataFetchingEnvironment.getArgument("id");
+            return USERS
                     .stream()
                     .filter(user -> user.get("id").equals(userId))
                     .findFirst()
@@ -52,10 +53,10 @@ public class GraphQLDataFetchers {
         };
     }
 
-    public DataFetcher employee() {
+    public DataFetcher<Map<String, Object>> employee() {
         return dataFetchingEnvironment -> {
-            String employeeId = dataFetchingEnvironment.getArgument("id");
-            return employees
+            var employeeId = dataFetchingEnvironment.getArgument("id");
+            return EMPLOYEES
                     .stream()
                     .filter(employee -> employee.get("id").equals(employeeId))
                     .findFirst()
